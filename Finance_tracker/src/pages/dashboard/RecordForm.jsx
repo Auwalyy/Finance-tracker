@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useUser } from "@clerk/clerk-react"
+import { FinancialRecordProvider } from "../../context/financial-record-context"
  
 const RecordForm = () => {
 
@@ -9,6 +10,7 @@ const RecordForm = () => {
  const [amount, setAmount] = useState("")
  const [category, setCategory] = useState("")
  const [paymentMethod, setPaymentMethod] = useState("")
+ const { records, addRecord } = useContext(FinancialRecordProvider)
 
  const handleSubmit = (e) => {
   e.preventDefault()
@@ -16,7 +18,7 @@ const RecordForm = () => {
   const { user } = useUser()
 
    const newRecord = {
-   userId: user.id,
+   userId: user.id ?? "",
    date: new Date(),
    description: description,
    amount: amount,
@@ -24,7 +26,7 @@ const RecordForm = () => {
    paymentMethod: paymentMethod
  };
 
- console.log(description, amount, category, paymentMethod)
+ addRecord(newRecord)
  setDescription("")
  setAmount("")
  setCategory("")
